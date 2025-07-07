@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Privacy Policy - QATAR VPN</title>
+  <!-- AOS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #ffffff;
-      color: #555555; /* Gray text */
+      color: #555555;
       margin: 0;
       padding: 40px 20px;
     }
@@ -33,17 +35,6 @@
       padding: 25px 30px;
       margin-bottom: 25px;
       box-shadow: 0 4px 12px rgba(128, 0, 0, 0.05);
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 0.8s ease forwards;
-    }
-
-    .card:nth-child(even) {
-      animation-delay: 0.2s;
-    }
-
-    .card:nth-child(odd) {
-      animation-delay: 0.4s;
     }
 
     .card h2 {
@@ -72,26 +63,18 @@
       color: #aaa;
       margin-top: 30px;
     }
-
-    /* Animation keyframes */
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>📜 Privacy Policy - QATAR VPN</h1>
+    <h1 data-aos="fade-down">📜 Privacy Policy - QATAR VPN</h1>
 
-    <div class="card">
+    <div class="card" data-aos="fade-up">
       <h2>👋 Introduction</h2>
       <p>At QATAR VPN, we are committed to protecting your privacy and data security. This policy explains how we collect, use, and safeguard your personal information when using our app.</p>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="zoom-in">
       <h2>📦 Information We Collect</h2>
       <p>We collect the minimum necessary information to operate the VPN service efficiently:</p>
       <ul>
@@ -101,7 +84,7 @@
       </ul>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="fade-right">
       <h2>⚙️ How We Use Your Information</h2>
       <p>We use the collected information for the following purposes:</p>
       <ul>
@@ -112,7 +95,7 @@
       </ul>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="fade-left">
       <h2>🔐 Data Protection</h2>
       <p>We implement strict security measures to protect your data:</p>
       <ul>
@@ -123,12 +106,12 @@
       </ul>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="zoom-in-up">
       <h2>📢 Advertisements</h2>
       <p>The app uses Google AdMob for advertisements. AdMob may collect certain information to deliver personalized ads. You can manage ad preferences through Google settings.</p>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="flip-up">
       <h2>🔄 Data Sharing</h2>
       <p>We do not share your personal information with any third party except in the following cases:</p>
       <ul>
@@ -138,7 +121,7 @@
       </ul>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="fade-up-right">
       <h2>🧾 Your Rights</h2>
       <p>You have the right to:</p>
       <ul>
@@ -149,17 +132,17 @@
       </ul>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="fade-up-left">
       <h2>👶 Children</h2>
       <p>We do not knowingly collect personal information from children under the age of 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.</p>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="zoom-out">
       <h2>🔄 Changes to Privacy Policy</h2>
       <p>We may update this privacy policy from time to time. We will notify you of any significant changes via an in-app notice.</p>
     </div>
 
-    <div class="card">
+    <div class="card" data-aos="zoom-in-down">
       <h2>📬 Contact Us</h2>
       <p>If you have any questions about this privacy policy, please contact us at:</p>
       <ul>
@@ -169,5 +152,14 @@
 
     <p class="updated">Last Updated: May 12, 2025</p>
   </div>
+
+  <!-- AOS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+  </script>
 </body>
 </html>
