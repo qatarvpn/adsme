@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #2f2f3a; /*     */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .game {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 20px;
+      background: #2f2f3a;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: inset 10px 10px 30px #25252d, inset -10px -10px 30px #393949;
+      position: relative;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      background: #2f2f3a;
+      border-radius: 15px;
+      box-shadow: 10px 10px 20px #25252d, -10px -10px 20px #393949;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 48px;
+      color: #00ffe7;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cell:hover {
+      transform: scale(1.05);
+    }
+
+    .cell.x::before,
+    .cell.o::before {
+      animation: pop 0.3s ease;
+    }
+
+    .cell.x {
+      color: #ff0066;
+      text-shadow: 0 0 15px #ff0066;
+    }
+
+    .cell.o {
+      color: #00ffe7;
+      text-shadow: 0 0 15px #00ffe7;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.4);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .winner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 30px 50px;
+      border-radius: 20px;
+      font-size: 28px;
+      text-align: center;
+      box-shadow: 0 0 30px #00ffe7;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .firework {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      animation: explode 1s ease forwards;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(0); opacity: 1; }
+      100% {
+        transform: scale(10);
+        opacity: 0;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="game" id="board"></div>
+
+  <script>
+    const board = document.getElementById("board");
+    const cells = [];
+    let currentPlayer = "x";
+    let gameEnded = false;
+
+    function createCell(i) {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.addEventListener("click", () => handleMove(cell, i));
+      board.appendChild(cell);
+      cells.push(cell);
+    }
+
+    function handleMove(cell, index) {
+      if (cell.textContent || gameEnded) return;
+
+      cell.textContent = currentPlayer.toUpperCase();
+      cell.classList.add(currentPlayer);
+
+      if (checkWinner()) {
+        showWinner(currentPlayer);
+        gameEnded = true;
+        triggerFireworks();
+        return;
+      }
+
+      if (cells.every(c => c.textContent)) {
+        showWinner("");
+        gameEnded = true;
+        return;
+      }
+
+      currentPlayer = currentPlayer === "x" ? "o" : "x";
+    }
+
+    function checkWinner() {
+      const combos = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
+
+      return combos.some(combo => {
+        const [a,b,c] = combo;
+        return cells[a].textContent &&
+               cells[a].textContent === cells[b].textContent &&
+               cells[a].textContent === cells[c].textContent;
+      });
+    }
+
+    function showWinner(player) {
+      const msg = document.createElement("div");
+      msg.classList.add("winner");
+      msg.textContent = player === "" ? " !" : `  ${player.toUpperCase()} !`;
+      board.appendChild(msg);
+    }
+
+    function triggerFireworks() {
+      for (let i = 0; i < 20; i++) {
+        const fw = document.createElement("div");
+        fw.className = "firework";
+        fw.style.left = Math.random() * 100 + "%";
+        fw.style.top = Math.random() * 100 + "%";
+        fw.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        board.appendChild(fw);
+        setTimeout(() => fw.remove(), 1000);
+      }
+    }
+
+    //  9 
+    for (let i = 0; i < 9; i++) {
+      createCell(i);
+    }
+  </script>
+</body>
+</html>
