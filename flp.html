@@ -131,7 +131,6 @@
         opacity: 0;
       }
     }
-
   </style>
 </head>
 <body>
@@ -147,31 +146,61 @@
     function createCell(i) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
-      cell.addEventListener("click", () => handleMove(cell, i));
+      cell.addEventListener("click", () => handlePlayerMove(cell, i));
       board.appendChild(cell);
       cells.push(cell);
     }
 
-    function handleMove(cell, index) {
-      if (cell.textContent || gameEnded) return;
+    function handlePlayerMove(cell, index) {
+      if (cell.textContent || gameEnded || currentPlayer !== "x") return;
 
-      cell.textContent = currentPlayer.toUpperCase();
-      cell.classList.add(currentPlayer);
+      makeMove(cell, "x");
 
       if (checkWinner()) {
-        showWinner(currentPlayer);
+        showWinner("x");
         gameEnded = true;
         triggerFireworks();
         return;
       }
 
-      if (cells.every(c => c.textContent)) {
+      if (isBoardFull()) {
         showWinner("تعادل");
         gameEnded = true;
         return;
       }
 
-      currentPlayer = currentPlayer === "x" ? "o" : "x";
+      currentPlayer = "o";
+      setTimeout(aiMove, 500); // تأخير بسيط لحركة AI
+    }
+
+    function aiMove() {
+      if (gameEnded) return;
+
+      const emptyCells = cells.filter(cell => !cell.textContent);
+      if (emptyCells.length === 0) return;
+
+      const cell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+      makeMove(cell, "o");
+
+      if (checkWinner()) {
+        showWinner("o");
+        gameEnded = true;
+        triggerFireworks();
+        return;
+      }
+
+      if (isBoardFull()) {
+        showWinner("تعادل");
+        gameEnded = true;
+        return;
+      }
+
+      currentPlayer = "x";
+    }
+
+    function makeMove(cell, player) {
+      cell.textContent = player.toUpperCase();
+      cell.classList.add(player);
     }
 
     function checkWinner() {
@@ -187,6 +216,10 @@
                cells[a].textContent === cells[b].textContent &&
                cells[a].textContent === cells[c].textContent;
       });
+    }
+
+    function isBoardFull() {
+      return cells.every(c => c.textContent);
     }
 
     function showWinner(player) {
