@@ -2,16 +2,23 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Tic Tac Toe</title>
+  <title>X O by Moussa</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: #2f2f3a; /*     */
+      background: #2f2f3a;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       font-family: 'Segoe UI', sans-serif;
+      color: white;
+    }
+
+    h1 {
+      margin: 20px 0 10px;
+      font-size: 32px;
+      text-shadow: 0 0 10px #00ffe7;
     }
 
     .game {
@@ -40,26 +47,22 @@
       transition: all 0.3s ease;
       user-select: none;
       position: relative;
-      overflow: hidden;
     }
 
     .cell:hover {
       transform: scale(1.05);
     }
 
-    .cell.x::before,
-    .cell.o::before {
-      animation: pop 0.3s ease;
-    }
-
     .cell.x {
       color: #ff0066;
       text-shadow: 0 0 15px #ff0066;
+      animation: pop 0.3s ease;
     }
 
     .cell.o {
       color: #00ffe7;
       text-shadow: 0 0 15px #00ffe7;
+      animation: pop 0.3s ease;
     }
 
     @keyframes pop {
@@ -78,7 +81,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       color: white;
       padding: 30px 50px;
       border-radius: 20px;
@@ -86,6 +89,25 @@
       text-align: center;
       box-shadow: 0 0 30px #00ffe7;
       animation: fadeIn 0.6s ease forwards;
+      z-index: 2;
+    }
+
+    .winner button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      background: #00ffe7;
+      color: #2f2f3a;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffe7;
+      transition: 0.3s;
+    }
+
+    .winner button:hover {
+      background: #00cfc4;
+      box-shadow: 0 0 20px #00ffe7;
     }
 
     @keyframes fadeIn {
@@ -113,6 +135,7 @@
   </style>
 </head>
 <body>
+  <h1>X O by Moussa</h1>
   <div class="game" id="board"></div>
 
   <script>
@@ -143,7 +166,7 @@
       }
 
       if (cells.every(c => c.textContent)) {
-        showWinner("");
+        showWinner("تعادل");
         gameEnded = true;
         return;
       }
@@ -169,7 +192,9 @@
     function showWinner(player) {
       const msg = document.createElement("div");
       msg.classList.add("winner");
-      msg.textContent = player === "" ? " !" : `  ${player.toUpperCase()} !`;
+      msg.innerHTML = player === "تعادل"
+        ? "😐 انتهت بالتعادل!<br><button onclick='resetGame()'>إعادة المحاولة</button>"
+        : `🎉 اللاعب ${player.toUpperCase()} فاز!<br><button onclick='resetGame()'>إعادة المحاولة</button>`;
       board.appendChild(msg);
     }
 
@@ -185,7 +210,17 @@
       }
     }
 
-    //  9 
+    function resetGame() {
+      board.innerHTML = "";
+      cells.length = 0;
+      currentPlayer = "x";
+      gameEnded = false;
+      for (let i = 0; i < 9; i++) {
+        createCell(i);
+      }
+    }
+
+    // بدء اللعبة
     for (let i = 0; i < 9; i++) {
       createCell(i);
     }
