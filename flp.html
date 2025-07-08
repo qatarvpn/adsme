@@ -5,13 +5,14 @@
   <title>X O by Moussa - Enhanced Edition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    /* --- General Styles & Resets --- */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    body {
+    <!-- body { -->
       background: linear-gradient(135deg, #2c3e50 0%, #4a4a4a 50%, #34495e 100%);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #e8e8e8;
@@ -22,6 +23,15 @@
       overflow-y: auto;
       min-height: 100vh;
       position: relative;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
 
     body::before {
@@ -145,13 +155,16 @@
     }
 
     .game {
+      position: relative; /* Needed for the winning line */
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      width: 90vw;
+      gap: clamp(10px, 3vw, 20px);
+      width: 90vmin;
+      height: 90vmin;
       max-width: 400px;
+      max-height: 400px;
       margin: 30px auto;
-      padding: 30px;
+      padding: clamp(15px, 5vw, 30px);
       border-radius: 30px;
       background: rgba(44, 62, 80, 0.3);
       backdrop-filter: blur(10px);
@@ -167,7 +180,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: clamp(3rem, 10vw, 5rem);
+      font-size: 9vmin; /* responsive without clamp for wider compatibility */
       font-weight: bold;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -226,6 +239,21 @@
       100% { transform: scale(1) rotate(-360deg); opacity: 1; }
     }
 
+    .winning-line {
+      position: absolute;
+      background-color: #ffc107;
+      height: 5px;
+      border-radius: 5px;
+      transform-origin: left;
+      box-shadow: 0 0 15px #ffc107;
+      animation: drawLine 0.7s ease-out forwards;
+    }
+
+    @keyframes drawLine {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
     .winner {
       position: fixed;
       top: 50%;
@@ -259,40 +287,11 @@
       font-size: 18px;
     }
 
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1000;
-    }
-
-    .particle {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: #7f8c8d;
-      border-radius: 50%;
-      animation: particle 2s linear infinite;
-    }
-
-    @keyframes particle {
-      0% {
-        transform: translateY(100vh) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100px) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
     .score-board {
       display: flex;
       justify-content: space-around;
-      width: 300px;
+      width: 90vw;
+      max-width: 300px;
       margin: 20px 0;
       padding: 20px;
       background: rgba(44, 62, 80, 0.3);
@@ -349,9 +348,11 @@
   </style>
 </head>
 <body>
-  <div class="particles" id="particles"></div>
+    <div id="particles-js"></div>
 
   <h1>X O by Moussa</h1>
+
+  <div id="particles-js"></div>
 
   <!-- Start Screen -->
   <div class="screen visible" id="startScreen">
@@ -396,6 +397,7 @@
   <!-- Game Board -->
   <div class="game" id="board" style="display: none;"></div>
 
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
     const startScreen = document.getElementById("startScreen");
     const difficultyScreen = document.getElementById("difficultyScreen");
@@ -408,28 +410,139 @@
     const scoreTie = document.getElementById("scoreTie");
     const particles = document.getElementById("particles");
 
-    let cells = [];
+            let cells = [];
+    const winningLine = document.createElement("div");
+    winningLine.classList.add("winning-line");
     let currentPlayer = "x";
     let gameEnded = false;
     let difficulty = "easy";
     let scores = { x: 0, o: 0, tie: 0 };
 
-    // Create floating particles
-    function createParticles() {
-      for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 2 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        particles.appendChild(particle);
+        /* --- Particles.js Initialization --- */
+    particlesJS('particles-js',
+      {
+        "particles": {
+          "number": {
+            "value": 80,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#ffffff"
+          },
+          "shape": {
+            "type": "circle",
+          },
+          "opacity": {
+            "value": 0.5,
+            "random": false,
+          },
+          "size": {
+            "value": 3,
+            "random": true,
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 150,
+            "color": "#ffffff",
+            "opacity": 0.4,
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 6,
+            "direction": "none",
+            "random": false,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "repulse"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "repulse": {
+              "distance": 100,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            },
+          }
+        },
+        "retina_detect": true
       }
+    );
+
+    // ---------------- Game Logic Helper Functions ----------------
+    function checkWinner() {
+      const winCombos = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+        [0, 4, 8], [2, 4, 6]             // diagonals
+      ];
+
+      for (const combo of winCombos) {
+        const [a, b, c] = combo;
+        if (
+          cells[a] && cells[a].textContent &&
+          cells[a].textContent === cells[b].textContent &&
+          cells[a].textContent === cells[c].textContent
+        ) {
+          drawWinningLine(combo);
+          return true;
+        }
+      }
+      return false;
     }
 
-    // Sound effects using Web Audio API
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
+    function isBoardFull() {
+      return cells.every(cell => cell.textContent);
+    }
+
+    function endGame(winner) {
+      gameEnded = true;
+
+      if (winner !== "tie") {
+        scores[winner]++;
+        if (winner === "x") {
+          scoreX.textContent = scores.x;
+        } else {
+          scoreO.textContent = scores.o;
+        }
+        playWinSound();
+        createCelebrationParticles();
+      } else {
+        scores.tie++;
+        scoreTie.textContent = scores.tie;
+      }
+
+      // Display winner/ tie screen
+      const winnerDiv = document.createElement("div");
+      winnerDiv.classList.add("winner");
+      winnerDiv.innerHTML = `$${winner === "tie" ? "It's a Tie!" : winner.toUpperCase() + " Wins!"}<br><button onclick="resetGame()">Play Again</button><br><button onclick="goToMenu()">Menu</button>`;
+      document.body.appendChild(winnerDiv);
+    }
+
+    // Sound effects using Web Audio API (guarded for WebView compatibility)
+    const audioSupported = !!(window.AudioContext || window.webkitAudioContext);
+    const audioContext = audioSupported ? new (window.AudioContext || window.webkitAudioContext)() : null;
+
     function playClickSound() {
+      if (!audioContext) return;
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
       
@@ -467,6 +580,21 @@
       });
     }
 
+    function playStartSound() {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime); // E5
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+
+      oscillator.start();
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.7);
+      oscillator.stop(audioContext.currentTime + 0.7);
+    }
+
     function showDifficulty() {
       startScreen.classList.remove("visible");
       difficultyScreen.classList.add("visible");
@@ -492,6 +620,7 @@
       currentPlayer = "x";
       gameEnded = false;
       updateCurrentPlayerDisplay();
+      playStartSound();
       
       for (let i = 0; i < 9; i++) {
         const cell = document.createElement("div");
@@ -583,87 +712,67 @@
       playClickSound();
     }
 
-    function checkWinner() {
-      const combos = [
-        [0,1,2], [3,4,5], [6,7,8],
-        [0,3,6], [1,4,7], [2,5,8],
-        [0,4,8], [2,4,6]
-      ];
-      return combos.some(([a, b, c]) =>
-        cells[a].textContent &&
-        cells[a].textContent === cells[b].textContent &&
-        cells[a].textContent === cells[c].textContent
-      );
-    }
+    function drawWinningLine(combo) {
+      const [a, b, c] = combo;
+      const cellA = cells[a];
+      const cellC = cells[c];
 
-    function isBoardFull() {
-      return cells.every(cell => cell.textContent);
-    }
+      const boardRect = board.getBoundingClientRect();
+      const cellARect = cellA.getBoundingClientRect();
+      const cellCRect = cellC.getBoundingClientRect();
 
-    function endGame(winner) {
-      gameEnded = true;
-      playWinSound();
-      
-      // Update scores
-      if (winner === "tie") {
-        scores.tie++;
-        scoreTie.textContent = scores.tie;
-      } else {
-        scores[winner]++;
-        if (winner === "x") {
-          scoreX.textContent = scores.x;
-        } else {
-          scoreO.textContent = scores.o;
-        }
-      }
+      const startX = cellARect.left + cellARect.width / 2 - boardRect.left;
+      const startY = cellARect.top + cellARect.height / 2 - boardRect.top;
+      const endX = cellCRect.left + cellCRect.width / 2 - boardRect.left;
+      const endY = cellCRect.top + cellCRect.height / 2 - boardRect.top;
 
-      const msg = document.createElement("div");
-      msg.classList.add("winner");
-      
-      let message = "";
-      if (winner === "tie") {
-        message = "🤝 It's a Tie!";
-      } else if (winner === "x") {
-        message = "🎉 Player X Wins!";
-      } else {
-        message = "🤖 Player O Wins!";
-      }
-      
-      msg.innerHTML = `
-        ${message}
-        <br>
-        <button onclick='resetGame()'>Play Again</button>
-        <button onclick='goToMenu()'>Main Menu</button>
-      `;
-      document.body.appendChild(msg);
-      
-      // Create celebration particles
-      createCelebrationParticles();
+      const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+      const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+
+      winningLine.style.width = `${length}px`;
+      winningLine.style.transform = `translate(${startX}px, ${startY}px) rotate(${angle}deg)`;
+      board.appendChild(winningLine);
     }
 
     function createCelebrationParticles() {
-      for (let i = 0; i < 100; i++) {
-        setTimeout(() => {
-          const particle = document.createElement('div');
-          particle.style.position = 'fixed';
-          particle.style.width = '6px';
-          particle.style.height = '6px';
-          particle.style.backgroundColor = Math.random() > 0.5 ? '#00ffe7' : '#ff0066';
-          particle.style.borderRadius = '50%';
-          particle.style.left = Math.random() * window.innerWidth + 'px';
-          particle.style.top = '-10px';
-          particle.style.pointerEvents = 'none';
-          particle.style.animation = 'particle 3s linear forwards';
-          document.body.appendChild(particle);
-          
-          setTimeout(() => {
-            particle.remove();
-          }, 3000);
-        }, i * 20);
-      }
+      const particlesContainer = document.createElement("div");
+      particlesContainer.id = "particles-js-celebration";
+      particlesContainer.style.cssText = "position:fixed;width:100%;height:100%;top:0;left:0;z-index:9999;";
+      document.body.appendChild(particlesContainer);
+
+      particlesJS("particles-js-celebration", {
+        particles: {
+          number: { value: 400, density: { enable: true, value_area: 800 } },
+          color: { value: ["#ff0066", "#00ffe7", "#ffc107", "#ffffff"] },
+          shape: { type: "star", stroke: { width: 0, color: "#000000" }, polygon: { nb_sides: 5 } },
+          opacity: { value: 1, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } },
+          size: { value: 6, random: true, anim: { enable: true, speed: 8, size_min: 2, sync: false } },
+          line_linked: { enable: false },
+          move: {
+            enable: true,
+            speed: 12,
+            direction: "top",
+            random: true,
+            straight: false,
+            out_mode: "out",
+            bounce: false,
+            attract: { enable: false, rotateX: 600, rotateY: 1200 },
+          },
+        },
+        interactivity: { detect_on: "canvas", events: { onhover: { enable: false }, onclick: { enable: false }, resize: true } },
+        retina_detect: true,
+      });
+
+      setTimeout(() => {
+        const pjs = document.getElementById("particles-js-celebration");
+        if (pjs) pjs.remove();
+      }, 5000);
     }
 
     function resetGame() {
+      if (winningLine.parentNode) {
+        winningLine.parentNode.removeChild(winningLine);
+      }
       document.querySelector(".winner")?.remove();
       initGame();
     }
@@ -681,7 +790,7 @@
     }
 
     // Initialize particles on load
-    createParticles();
+    // createParticles(); // This is now handled by particles.js library
   </script>
 </body>
 </html>
