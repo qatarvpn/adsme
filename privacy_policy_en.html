@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Block Puzzle</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #4a6bdf;
+            --secondary-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .last-update {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .card h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .card p, .card ul {
+            margin-bottom: 15px;
+        }
+        
+        .card ul {
+            padding-left: 20px;
+        }
+        
+        .card li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .card li::before {
+            content: '•';
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .contact-btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .contact-btn:hover {
+            background: transparent;
+            color: var(--primary-color);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Staggered animation for cards */
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Privacy Policy</h1>
+            <p class="last-update">Last Updated: August 3, 2025</p>
+        </header>
+        
+        <div class="cards-container">
+            <div class="card">
+                <h2>Introduction</h2>
+                <p>Welcome to Block Puzzle. We value your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and disclose your information through our application.</p>
+            </div>
+            
+            <div class="card">
+                <h2>Information We Collect</h2>
+                <p>We collect the following information:</p>
+                <ul>
+                    <li>Basic performance information (such as app crashes)</li>
+                    <li>Advertising ID to improve ad experience</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>How We Use Your Information</h2>
+                <ul>
+                    <li>To provide the requested service</li>
+                    <li>To improve user experience</li>
+                    <li>To display targeted advertisements</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Information Sharing</h2>
+                <p>We do not sell your personal information. We may share information with:</p>
+                <ul>
+                    <li>Advertising providers like Google AdMob</li>
+                    <li>When required by law</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Advertisements</h2>
+                <p>We use Google AdMob to display ads, which may use:</p>
+                <ul>
+                    <li>Advertising ID</li>
+                    <li>Information about your interaction with ads</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Your Rights</h2>
+                <p>You have the right to:</p>
+                <ul>
+                    <li>Opt out of ad tracking in your device settings</li>
+                    <li>Delete app data stored locally on your device</li>
+                </ul>
+                
+                <a href="mailto:moussamomo90@gmail.com" class="contact-btn">Contact Us</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add animation on scroll
+        const cards = document.querySelectorAll('.card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
